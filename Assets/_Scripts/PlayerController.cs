@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour
     private void OnAnimatorMove()
     {
         
-        //S = S0 + V *T
+        //S(espacio) = S0(espacio inicial) + V(velocidad ) * T(tiempo
+        //)
         // S = S0 + Delta S
         _rigidbody.MovePosition(_rigidbody.position + movement * _animator.deltaPosition.magnitude);
         _rigidbody.MoveRotation(rotation);
