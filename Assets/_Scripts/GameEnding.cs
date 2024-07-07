@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameEnding : MonoBehaviour
 {
@@ -9,8 +10,10 @@ public class GameEnding : MonoBehaviour
     public float fadeDuration = 1f;
 
     private bool isPlayerAtExit;
+    private bool isPlayerCaught;
     public GameObject player;
     public CanvasGroup exitBackgroundCanvasGroup;
+    public CanvasGroup caughtBackgroundCanvasGroup;
 
     private float timer;
 
@@ -24,21 +27,39 @@ public class GameEnding : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isPlayerAtExit)
+       if(isPlayerAtExit)
+       {
+           EndLevel(exitBackgroundCanvasGroup, false);
+       }
+        else if(isPlayerCaught)
         {
-            timer += Time.deltaTime;
-           // exitBackgroundCanvasGroup.alpha = timer / fadeDuration;
-           exitBackgroundCanvasGroup.alpha = Mathf.Clamp(timer / fadeDuration, 0,1);
-            if (timer > fadeDuration + displayImageDuration)
-            {
-                EndLevel();
-            }
+            EndLevel(caughtBackgroundCanvasGroup, true);
         }
     }
-
-    private void EndLevel()
+    /// <summary>
+    /// Lanza La imageen de fin de la partidad
+    /// </summary>
+    /// <param name="imageCanvaasGroup">Imagen de fin de partida correspondeinte</param>
+    private void EndLevel(CanvasGroup imageCanvaasGroup, bool doRestart)
     {
-        Application.Quit();
+       
+            timer += Time.deltaTime;
+            // exitBackgroundCanvasGroup.alpha = timer / fadeDuration;
+            imageCanvaasGroup.alpha = Mathf.Clamp(timer / fadeDuration, 0,1);
+            if (timer > fadeDuration + displayImageDuration)
+            {
+                if (doRestart)
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+                else
+                {
+                    Application.Quit();
+                }
+               
+            }
+        
+        
     }
     
     private void OnTriggerEnter(Collider other)
@@ -47,5 +68,10 @@ public class GameEnding : MonoBehaviour
         {
             isPlayerAtExit = true;
         }
+    }
+
+    public void CatchPlayer()
+    {
+        isPlayerCaught = true;
     }
 }
