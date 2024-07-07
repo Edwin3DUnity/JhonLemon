@@ -28,6 +28,8 @@ public class Observer : MonoBehaviour
             Ray ray = new Ray(transform.position , direction);
             RaycastHit raycastHit;
             
+            Debug.DrawRay(transform.position, direction, Color.white, Time.deltaTime, true);
+            
             if (Physics.Raycast(ray, out raycastHit))
             {
                 if (raycastHit.collider.transform == player)
@@ -54,5 +56,14 @@ public class Observer : MonoBehaviour
         {
             isPlayerInRange = false;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(transform.position, 0.1f);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, player.position);
+            
     }
 }
