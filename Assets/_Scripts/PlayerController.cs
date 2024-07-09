@@ -17,12 +17,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float turnSpeed;
 
     private Quaternion rotation = Quaternion.identity;
+
+
+    private AudioSource _audioSource;
     
     // Start is called before the first frame update
     void Start()
     {
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -41,6 +45,17 @@ public class PlayerController : MonoBehaviour
         
         _animator.SetBool("IsWalking", isWalking);
 
+        if (isWalking)
+        {
+            if (!_audioSource.isPlaying)
+            {
+                _audioSource.Play();
+            }    
+        }
+        else
+        {
+            _audioSource.Stop();
+        }
 
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, movement, turnSpeed * Time.fixedDeltaTime, 0);
         
