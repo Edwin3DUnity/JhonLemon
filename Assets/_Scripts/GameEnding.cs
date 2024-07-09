@@ -18,6 +18,12 @@ public class GameEnding : MonoBehaviour
     private float timer;
 
     public float displayImageDuration = 1f;
+
+    public AudioSource exitAudio;
+    public AudioSource caughtAudio;
+
+    private bool hasAudioPlayed;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,20 +35,25 @@ public class GameEnding : MonoBehaviour
     {
        if(isPlayerAtExit)
        {
-           EndLevel(exitBackgroundCanvasGroup, false);
+           EndLevel(exitBackgroundCanvasGroup, false, exitAudio);
        }
         else if(isPlayerCaught)
         {
-            EndLevel(caughtBackgroundCanvasGroup, true);
+            EndLevel(caughtBackgroundCanvasGroup, true, caughtAudio);
         }
     }
     /// <summary>
     /// Lanza La imageen de fin de la partidad
     /// </summary>
     /// <param name="imageCanvaasGroup">Imagen de fin de partida correspondeinte</param>
-    private void EndLevel(CanvasGroup imageCanvaasGroup, bool doRestart)
+    private void EndLevel(CanvasGroup imageCanvaasGroup, bool doRestart, AudioSource audioSource)
     {
-       
+        if (!hasAudioPlayed)
+        {
+            audioSource.Play();
+            hasAudioPlayed = true;
+        }
+        
             timer += Time.deltaTime;
             // exitBackgroundCanvasGroup.alpha = timer / fadeDuration;
             imageCanvaasGroup.alpha = Mathf.Clamp(timer / fadeDuration, 0,1);
